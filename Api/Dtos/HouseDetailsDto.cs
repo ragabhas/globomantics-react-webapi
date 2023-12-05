@@ -1,0 +1,1 @@
+public record HouseDetailsDto(int Id, string? Address, string? Country, double Price, string? description, string? photo);
