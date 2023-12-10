@@ -7,6 +7,7 @@ public class HouseDbContext : DbContext
 
     }
     public DbSet<House> Houses => Set<House>();
+    public DbSet<Bid> Bids => Set<Bid>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

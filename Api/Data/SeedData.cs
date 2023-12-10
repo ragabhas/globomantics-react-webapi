@@ -45,5 +45,21 @@ public static class SeedData
                 Price = 400500
             }
         });
+
+        builder.Entity<Bid>().HasData(new List<Bid>
+        {
+            new Bid { Id = 1, HouseId = 1, Bidder = "Sonia Reading", Amount = 200000 },
+            new Bid { Id = 2, HouseId = 1, Bidder = "Dick Johnson", Amount = 202400 },
+            new Bid { Id = 3, HouseId = 2, Bidder = "Mohammed Vahls", Amount = 302400 },
+            new Bid { Id = 4, HouseId = 2, Bidder = "Jane Williams", Amount = 310500 },
+            new Bid { Id = 5, HouseId = 2, Bidder = "John Kepler", Amount = 315400 },
+            new Bid { Id = 6, HouseId = 3, Bidder = "Bill Mentor", Amount = 201000 },
+            new Bid { Id = 7, HouseId = 4, Bidder = "Melissa Kirk", Amount = 410000 },
+            new Bid { Id = 8, HouseId = 4, Bidder = "Scott Max", Amount = 450000 },
+            new Bid { Id = 9, HouseId = 4, Bidder = "Christine James", Amount = 470000 },
+            new Bid { Id = 10, HouseId = 5, Bidder = "Omesh Carim", Amount = 450000 },
+            new Bid { Id = 11, HouseId = 5, Bidder = "Charlotte Max", Amount = 150000 },
+            new Bid { Id = 12, HouseId = 5, Bidder = "Marcus Scott", Amount = 170000 },
+        });
     }
 }
