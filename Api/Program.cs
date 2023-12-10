@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Http.HttpResults;
+using System.Reflection;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,8 @@ builder.Services.AddDbContext<HouseDbContext>(options =>
     options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
 });
 builder.Services.AddScoped<IHouseRepository, HouseRepository>();
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -45,11 +48,18 @@ app.MapGet("/house/{id}", async (IHouseRepository houseRepository, int id) =>
 }).ProducesProblem(statusCode: StatusCodes.Status404NotFound)
 .Produces<HouseDetailsDto>(statusCode: StatusCodes.Status200OK);
 
-app.MapPost("/houses", async (IHouseRepository houseRepository, [FromBody] HouseDetailsDto houseDto) =>
+app.MapPost("/houses", async (IHouseRepository houseRepository, [FromBody] HouseDetailsDto houseDto, IValidator<HouseDetailsDto> houseValidator) =>
 {
+    var validationResult = await houseValidator.ValidateAsync(houseDto);
+    if (!validationResult.IsValid)
+    {
+        return Results.ValidationProblem(validationResult.ToDictionary());
+    }
+
     var newHouse = await houseRepository.Add(houseDto);
     return Results.Created($"/house/{newHouse.Id}", newHouse);
-}).Produces<HouseDetailsDto>(statusCode: StatusCodes.Status201Created);
+}).Produces<HouseDetailsDto>(statusCode: StatusCodes.Status201Created)
+.ProducesValidationProblem(statusCode: StatusCodes.Status400BadRequest);
 
 app.MapPut("/houses", async (IHouseRepository houseRepository, [FromBody] HouseDetailsDto houseDto) =>
 {
